@@ -77,7 +77,7 @@ class Student {
       content: commentContent,
       studentName: this.name,
     });
-    comment.post("This is a comment");
+    comment.post();
   }
 }
 class FreeStudent extends Student {

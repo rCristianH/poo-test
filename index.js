@@ -1,3 +1,17 @@
+class Comment {
+  constructor({ content, studentName, studentRole = "student" }) {
+    this.content = content;
+    this.studentName = studentName;
+    this.studentRole = studentRole;
+    this.likes = 0;
+  }
+  post() {
+    console.log(
+      `${this.studentName} (${this.studentRole}) \n${this.likes} likes \n${this.content}`
+    );
+  }
+}
+
 function videoPlay(id) {
   const urlST = `https://platzi.com/${id}`;
   console.log(`Reproducir video de URL:${urlST}`);
@@ -6,7 +20,7 @@ function videoStop(id) {
   const urlST = `https://platzi.com/${id}`;
   console.log(`Pausar reproducion de ${urlST}`);
 }
-export class Clase {
+class Clase {
   constructor({ name, videoID }) {
     this.name = name;
     this.videoID = videoID;
@@ -19,11 +33,12 @@ export class Clase {
   }
 }
 class Course {
-  constructor({ name, clases = [], isFree = false,lang = "es" }) {
+  constructor({ name, clases = [], isFree = false, lang = "es" }) {
     this._name = name;
     this.clases = clases;
     this.isFree = isFree;
-    this.lang = lang  }
+    this.lang = lang;
+  }
   get name() {
     return this._name;
   }
@@ -57,16 +72,23 @@ class Student {
     this.aprovedCourses = aprovedCourses;
     this.learningPath = learningPath;
   }
+  postComment(commentContent) {
+    const comment = new Comment({
+      content: commentContent,
+      studentName: this.name,
+    });
+    comment.post("This is a comment");
+  }
 }
 class FreeStudent extends Student {
   constructor(props) {
     super(props);
   }
-  approveCourse(newCourse){
-    if(newCourse.isFree){
-      this.approveCourse.push(newCourse)
-    }else{
-      console.log(`Sorry, ${this.name}, you can only access free courses`)
+  approveCourse(newCourse) {
+    if (newCourse.isFree) {
+      this.approveCourse.push(newCourse);
+    } else {
+      console.log(`Sorry, ${this.name}, you can only access free courses`);
     }
   }
 }
@@ -92,6 +114,23 @@ class ExpertStudent extends Student {
     this.approvedCourses.push(newCourse);
   }
 }
+class TeacherStudent extends Student {
+  constructor(props) {
+    super(props);
+  }
+
+  approveCourse(newCourse) {
+    this.approvedCourses.push(newCourse);
+  }
+  postComment(commentContent) {
+    const comment = new Comment({
+      content: commentContent,
+      studentName: this.name,
+      studentRole: "Teacher",
+    });
+    comment.post();
+  }
+}
 
 const claseOOP = new Clase({
   name: "Clase de futbol programcion orientada a objetos",
@@ -100,6 +139,7 @@ const claseOOP = new Clase({
 const courseProgramBasic = new Course({
   name: "Curso de programacion Basica",
   clases: [claseOOP],
+  isFree: true,
 });
 
 const courseDefiCSS = new Course({
@@ -112,9 +152,18 @@ const schoolWeb = new LearningPath({
   progrest: 50,
 });
 
-const cris = new Student({
+const cris = new ExpertStudent({
   name: "Cristian",
   username: "rCristianH",
   email: "example@example.com",
   learningPath: schoolWeb,
 });
+
+const freddy = new TeacherStudent({
+  name: "Freddy",
+  username: "freddier",
+  email: "freddier@platzi.com",
+  learningPath: schoolWeb,
+});
+
+console.log(freddy.postComment("I'm a the boss"));

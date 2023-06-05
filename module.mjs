@@ -1,4 +1,4 @@
-import { Clase } from "./index.mjs";
+import { Clase } from "./index.js";
 
 const clase50 = new Clase({
   name:"JS intro",
